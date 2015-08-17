@@ -42,6 +42,7 @@ function jump() {
     if (canJump) {
         vy = -12.0;
         canJump = false;
+        removeBubble();
     }
 }
 
@@ -55,6 +56,7 @@ function checkCollison() {
         var bubble = bubbles[i].bubble;
         if (hasCollided(dude, bubble)) {
             collided = true;
+            canJump=true;
             collidedBubble = bubbles[i];
             break;
         }
@@ -126,17 +128,21 @@ function hasCollided(el1, el2) {
 
 
 /**
- * removeBubble
+ * checkRemoveBubble
  * Checks to see if jumper has grown to scale, then sets bubble outside of view for cleanup
  * @returns 
  */
-function removeBubble() {
+function checkRemoveBubble() {
     if (scale > 0.75) {
-        collided = false;
-        scale = 0.5;
-        dude.style.transform = 'scale(' + scale + ')';
-        collidedBubble.y=-collidedBubble.h-50;
+        removeBubble();
     }
+}
+
+function removeBubble() {
+    collided = false;
+    scale = 0.5;
+    dude.style.transform = 'scale(' + scale + ')';
+    collidedBubble.y = -collidedBubble.h - 50;
 }
 
 /**
@@ -154,7 +160,7 @@ function draw() {
     }
 
     render();
-    removeBubble();
+    checkRemoveBubble();
 
     requestAnimationFrame(draw);
 }
