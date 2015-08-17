@@ -1,6 +1,7 @@
 var dude = document.getElementById('jumper'),
-    px = (window.innerWidth / 2) - 84,
-    py = window.innerHeight - 50,
+    stage=document.getElementById('stage'),
+    px = (stage.clientWidth / 2) - 84,
+    py = stage.clientHeight - 50,
     vy = 0.0,
     gravity = 0.5,
     canJump = true,
@@ -81,8 +82,8 @@ function removeBubbles() {
     var k = backgroundBubbles.length;
     while (k--) {
         if (backgroundBubbles[k].y < -backgroundBubbles[k].h - 50) {
-            backgroundBubbles[k].y = Math.round(Math.random() * window.innerHeight / 2) + (window.innerHeight);
-            backgroundBubbles[k].x = Math.round(Math.random() * window.innerWidth);
+            backgroundBubbles[k].y = Math.round(Math.random() * stage.clientHeight / 2) + (stage.clientHeight);
+            backgroundBubbles[k].x = Math.round(Math.random() * stage.clientWidth);
         }
     }
 }
@@ -197,8 +198,8 @@ function jumping() {
     py += vy;
 
 
-    if (py > window.innerHeight - 75) {
-        py = window.innerHeight - 75;
+    if (py > stage.clientHeight - 75) {
+        py = stage.clientHeight - 75;
         vy = 0.0;
         canJump = true;
         collided = false;
@@ -282,8 +283,8 @@ function Bubble(id, w, h, collidable, x, y) {
     var bubble = document.createElement('div'),
         id = 'bubble_' + id,
         s = Math.round(Math.random() * 1) + 2,
-        x = x || Math.round(Math.random() * window.innerWidth) - w / 2,
-        y = y || Math.round(Math.random() * window.innerHeight / 2) + (window.innerHeight);
+        x = x || Math.round(Math.random() * stage.clientWidth) - w / 2,
+        y = y || Math.round(Math.random() * 100) + (stage.clientHeight);
 
     bubble.setAttribute('id', id);
     bubble.className = 'bubble inner ' + collidable;

@@ -1,5 +1,9 @@
 # Node and logs
 node_modules
+dist/css/styles.min.css
+dist/index.html
+dist/js/bubblejumper-js-1.0.0.min.js
+
 *.log
 
 # Windows image file caches
