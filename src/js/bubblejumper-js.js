@@ -1,5 +1,6 @@
 var dude = document.getElementById('jumper'),
-    stage=document.getElementById('stage'),
+    stage = document.getElementById('stage'),
+    spkeyTop = document.getElementById('spikey-top'),
     px = (stage.clientWidth / 2) - 84,
     py = stage.clientHeight - 50,
     vy = 0.0,
@@ -33,6 +34,18 @@ setInterval(function () {
     j++;
 }, 1000);
 
+var spikeyLeft = -18;
+
+for (var i = 0; i < 60; i++) {
+    var spikey = document.createElement('div');
+
+    spikey.className = 'spikey';
+    spikey.style.left = spikeyLeft + 'px';
+    spikeyLeft += 25;
+
+    document.getElementById('spikey-top').appendChild(spikey);
+}
+
 
 /**
  * jump
@@ -41,7 +54,7 @@ setInterval(function () {
  */
 function jump() {
     if (canJump) {
-        vy = -6.0;
+        vy = -16.0;
         canJump = false;
         removeBubble();
     }
@@ -57,7 +70,7 @@ function checkCollison() {
         var bubble = bubbles[i].bubble;
         if (hasCollided(dude, bubble)) {
             collided = true;
-            canJump=true;
+            canJump = true;
             collidedBubble = bubbles[i];
             break;
         }
