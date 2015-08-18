@@ -264,9 +264,9 @@ function render() {
         bubbles[i].bubble.style.top = bubbles[i].y + 'px'
     }
     if (collided) {
-        px = collidedBubble.x + 20;
-        py = collidedBubble.y + 15;
-        scale += 0.002;
+        px = collidedBubble.x + 10;
+        py = collidedBubble.y + 5;
+        scale += 0.001;
         dude.style.transform = 'scale(' + scale + ')';
     }
 
