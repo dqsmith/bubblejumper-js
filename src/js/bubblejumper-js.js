@@ -42,7 +42,7 @@ for (var i = 0; i < 60; i++) {
     spikey.className = 'spikey';
     spikey.style.left = spikeyLeft + 'px';
     spikeyLeft += 25;
-
+ 
     document.getElementById('spikey-top').appendChild(spikey);
 }
 
