@@ -3,20 +3,26 @@ body {
     overflow: hidden;
 }
 
-#spikey-top{
+#spikey-top, #spikey-bottom{
     position: absolute;
     width:100%;
     left:0;
     height:34px;
 } 
 
+.spikey.bottom {
+    transform: scaleY(-1);
+}
+
+.spikey.not(.bottom){
+    transform: scaleY(1);
+}
 .spikey {
     width: 67px;
     height: 34px;
     position: absolute;
     left: -18px;
     top: -9px;
-    transform: scale(0.5);
 }
 
 .spikey:after {

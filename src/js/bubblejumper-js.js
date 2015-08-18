@@ -34,6 +34,7 @@ setInterval(function () {
     j++;
 }, 1000);
 
+//Add top spikey
 var spikeyLeft = -18;
 
 for (var i = 0; i < 60; i++) {
@@ -41,9 +42,25 @@ for (var i = 0; i < 60; i++) {
 
     spikey.className = 'spikey';
     spikey.style.left = spikeyLeft + 'px';
+    spikey.style.zIndex='100'    
     spikeyLeft += 25;
  
     document.getElementById('spikey-top').appendChild(spikey);
+}
+
+//Add bottom spikey
+spikeyLeft = -18;
+
+for (var i = 0; i < 60; i++) {
+    var spikey = document.createElement('div');
+
+    spikey.className = 'spikey bottom';
+    spikey.style.left = spikeyLeft + 'px';
+    spikey.style.top=stage.clientHeight-34 +'px';
+    spikey.style.zIndex='100';
+    spikeyLeft += 25;
+ 
+    document.getElementById('spikey-bottom').appendChild(spikey);
 }
 
 
