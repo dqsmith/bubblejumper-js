@@ -41,7 +41,7 @@ setInterval(function () {
  */
 function jump() {
     if (canJump) {
-        vy = -12.0;
+        vy = -6.0;
         canJump = false;
         removeBubble();
     }
