@@ -100,10 +100,12 @@ function checkCollison() {
 function removeBubbles() {
     var i = bubbles.length;
     while (i--) {
-        if (bubbles[i].y < -bubbles[i].h - 50) {
+        //Pop bubble if it his top spikies
+        if (bubbles[i].y < 30) {
             var bubble = document.getElementById(bubbles[i].id);
             document.getElementById('stage').removeChild(bubble);
             bubbles.splice(i, 1);
+            
         }
     }
 
@@ -162,7 +164,7 @@ function hasCollided(el1, el2) {
  * @returns 
  */
 function checkRemoveBubble() {
-    if (scale > 0.75) {
+    if (scale > 0.75 || collidedBubble.y<30) {
         removeBubble();
     }
 }
