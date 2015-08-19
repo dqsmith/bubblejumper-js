@@ -1,6 +1,7 @@
 var dude = document.getElementById('jumper'),
     stage = document.getElementById('stage'),
-    spkeyTop = document.getElementById('spikey-top'),
+    spikeyTop = document.getElementById('spikey-top'),
+    spikeyBottom = document.getElementById('spikey-bottom'),
     px = (stage.clientWidth / 2) - 84,
     py = stage.clientHeight - 50,
     vy = 0.0,
@@ -42,24 +43,23 @@ for (var i = 0; i < 60; i++) {
 
     spikey.className = 'spikey';
     spikey.style.left = spikeyLeft + 'px';
-    spikey.style.zIndex='100'    
-    spikeyLeft += 25;
- 
+    spikey.style.zIndex = '100'
+    spikeyLeft += 45;
+
     document.getElementById('spikey-top').appendChild(spikey);
 }
 
 //Add bottom spikey
 spikeyLeft = -18;
 
-for (var i = 0; i < 60; i++) {
+for (var i = 0; i < 40; i++) {
     var spikey = document.createElement('div');
 
     spikey.className = 'spikey bottom';
     spikey.style.left = spikeyLeft + 'px';
-    spikey.style.top=stage.clientHeight-34 +'px';
-    spikey.style.zIndex='100';
-    spikeyLeft += 25;
- 
+    spikey.style.zIndex = '100';
+    spikeyLeft += 45;
+
     document.getElementById('spikey-bottom').appendChild(spikey);
 }
 
