@@ -43,7 +43,6 @@ for (var i = 0; i < 60; i++) {
 
     spikey.className = 'spikey';
     spikey.style.left = spikeyLeft + 'px';
-    spikey.style.zIndex = '100'
     spikeyLeft += 45;
 
     document.getElementById('spikey-top').appendChild(spikey);
@@ -57,7 +56,6 @@ for (var i = 0; i < 40; i++) {
 
     spikey.className = 'spikey bottom';
     spikey.style.left = spikeyLeft + 'px';
-    spikey.style.zIndex = '100';
     spikeyLeft += 45;
 
     document.getElementById('spikey-bottom').appendChild(spikey);

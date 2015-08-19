@@ -14,11 +14,13 @@ body {
 #spikey-top {
     transform: scaleY(-1);
     top: 74px;
+    z-index: 100;
 }
 
 #spikey-bottom {
     transform: scaleY(1);
     top: 692px;
+    z-index: 100;
 }
 
 #spikey-top {}
