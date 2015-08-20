@@ -2,8 +2,10 @@ var dude = document.getElementById('jumper'),
     stage = document.getElementById('stage'),
     spikeyTop = document.getElementById('spikey-top'),
     spikeyBottom = document.getElementById('spikey-bottom'),
-    px = (stage.clientWidth / 2) - 84,
-    py = stage.clientHeight - 50,
+    stageHeight=stage.clientHeight,
+    stageWidth=stage.clientWidth,
+    px = (stageWidth / 2) - 84,
+    py = stageHeight - 50,
     vy = 0.0,
     gravity = 0.5,
     canJump = true,
@@ -21,8 +23,7 @@ collidedBubble = bubbles[0];
 collided = true;
 
 //Set the jumper
-dude.style.left = px + 'px';
-dude.style.top = py + 'px';
+dude.style.cssText = 'left:' + px + 'px;top:' + py + 'px;';
 
 //Release a bubble once a second
 setInterval(function () {
@@ -81,17 +82,23 @@ function jump() {
  * @returns 
  */
 function checkCollison() {
-    for (var i in bubbles) {
-        var bubble = bubbles[i].bubble;
-        if (hasCollided(dude, bubble)) {
-            collided = true;
-            canJump = true;
-            collidedBubble = bubbles[i];
-            break;
+    //Check for bubble collision
+    if (!collided) {
+        for (var i in bubbles) {
+            var bubble = bubbles[i].bubble;
+            if (hasCollided(dude, bubble)) {
+                collided = true;
+                canJump = true;
+                collidedBubble = bubbles[i];
+                return;
+            }
         }
+        
+        if(py == stageHeight - 75){
+            //Jumper has crashed on spikey
+        }        
     }
 }
-
 /**
  * removeBubbles
  * removes collidable bubbles and resets non-collidable bubbles
@@ -102,8 +109,7 @@ function removeBubbles() {
     while (i--) {
         //Pop bubble if it his top spikies
         if (bubbles[i].y < 30) {
-            var bubble = document.getElementById(bubbles[i].id);
-            document.getElementById('stage').removeChild(bubble);
+            stage.removeChild(document.getElementById(bubbles[i].id));
             bubbles.splice(i, 1);
             
         }
@@ -112,8 +118,8 @@ function removeBubbles() {
     var k = backgroundBubbles.length;
     while (k--) {
         if (backgroundBubbles[k].y < -backgroundBubbles[k].h - 50) {
-            backgroundBubbles[k].y = Math.round(Math.random() * stage.clientHeight / 2) + (stage.clientHeight);
-            backgroundBubbles[k].x = Math.round(Math.random() * stage.clientWidth);
+            backgroundBubbles[k].y = Math.round(Math.random() * stageHeight / 2) + (stageHeight);
+            backgroundBubbles[k].x = Math.round(Math.random() * stageWidth);
         }
     }
 }
@@ -196,6 +202,7 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
+
 /**
  * move
  * Move the dude every 0.0033 seconds; if the dude is already moving return
@@ -228,8 +235,8 @@ function jumping() {
     py += vy;
 
 
-    if (py > stage.clientHeight - 75) {
-        py = stage.clientHeight - 75;
+    if (py > stageHeight - 75) {
+        py = stageHeight - 75;
         vy = 0.0;
         canJump = true;
         collided = false;
@@ -300,31 +307,29 @@ function render() {
         dude.style.transform = 'scale(' + scale + ')';
     }
 
-    dude.style.left = px + 'px';
-    dude.style.top = py + 'px';
+    dude.style.cssText = 'left:' + px + 'px;top:' + py + 'px;';
 }
 
 //Events
 window.onkeydown = keyDown;
 window.onkeyup = keyUp;
 
-
+/**
+ * Bubble
+ * Bubble class for creation
+ * @returns 
+ */
 function Bubble(id, w, h, collidable, x, y) {
     var bubble = document.createElement('div'),
         id = 'bubble_' + id,
         s = Math.round(Math.random() * 1) + 2,
-        x = x || Math.round(Math.random() * stage.clientWidth) - w / 2,
-        y = y || Math.round(Math.random() * 100) + (stage.clientHeight);
+        x = x || Math.round(Math.random() * stageWidth) - w / 2,
+        y = y || Math.round(Math.random() * 100) + (stageHeight);
 
     bubble.setAttribute('id', id);
     bubble.className = 'bubble inner ' + collidable;
-    bubble.style.left = x + 'px';
-    bubble.style.top = y + 'px';
-    bubble.style.width = w + 'px';
-    bubble.style.height = h + 'px';
-    bubble.style.position = 'absolute';
-
-    document.getElementById('stage').appendChild(bubble);
+    bubble.style.cssText = 'left: ' + x + 'px; top: ' + y + 'px; width:' + w + 'px; height:' + h + 'px;';
+    stage.appendChild(bubble);
 
     return {
         bubble: bubble,
@@ -336,5 +341,4 @@ function Bubble(id, w, h, collidable, x, y) {
         h: h
     }
 }
-
 draw();
