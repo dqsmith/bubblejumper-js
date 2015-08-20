@@ -81,17 +81,23 @@ function jump() {
  * @returns 
  */
 function checkCollison() {
-    for (var i in bubbles) {
-        var bubble = bubbles[i].bubble;
-        if (hasCollided(dude, bubble)) {
-            collided = true;
-            canJump = true;
-            collidedBubble = bubbles[i];
-            break;
+    //Check for bubble collision
+    if (!collided) {
+        for (var i in bubbles) {
+            var bubble = bubbles[i].bubble;
+            if (hasCollided(dude, bubble)) {
+                collided = true;
+                canJump = true;
+                collidedBubble = bubbles[i];
+                return;
+            }
         }
+        
+        if(py == stage.clientHeight - 75){
+            //Jumper has crashed on spikey
+        }        
     }
 }
-
 /**
  * removeBubbles
  * removes collidable bubbles and resets non-collidable bubbles
@@ -195,6 +201,7 @@ function draw() {
 
     requestAnimationFrame(draw);
 }
+
 
 /**
  * move
