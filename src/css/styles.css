@@ -106,6 +106,7 @@ body {
 
 .inner.bubble {
     background: radial-gradient(circle at 50% 55%, rgba(240, 245, 255, 0.6), rgba(240, 245, 255, 0.6) 40%, rgba(225, 238, 255, 0.5) 60%, rgba(43, 130, 255, 0.3));
+    position: absolute;
     /* -webkit-animation: bubble-anim 2s ease-out infinite;
     animation: bubble-anim 2s ease-out infinite;*/
 }
