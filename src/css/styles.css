@@ -125,6 +125,19 @@ body {
     background: radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 74%, #ffffff 80%, #ffffff 84%, rgba(255, 255, 255, 0) 100%);
 }
 
+#time-cont {
+    position: absolute;
+    top: 50px;
+    left: 40px;
+    font-size: 36px;
+}
+
+#score-cont {
+    position: absolute;
+    top: 50px;
+    right: 150px;
+    font-size: 36px;
+}
 
 /*@-webkit-keyframes bubble-anim {
     0% {
