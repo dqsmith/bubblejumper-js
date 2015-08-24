@@ -89,6 +89,7 @@ function checkCollison() {
             if (hasCollided(dude, bubble)) {
                 collided = true;
                 canJump = true;
+                document.getElementById(bubble.id).className='bubble inner animate';
                 collidedBubble = bubbles[i];
                 return;
             }
@@ -295,20 +296,20 @@ function keyUp(e) {
  * Render all screen assets; move dude and collidable bubles
  * @returns 
  */
-
-function render() {
-    for (var i in bubbles) {
-        bubbles[i].bubble.style.top = bubbles[i].y + 'px'
-    }
-    if (collided) {
-        px = collidedBubble.x + 10;
-        py = collidedBubble.y + 5;
-        scale += 0.001;
-        dude.style.transform = 'scale(' + scale + ')';
-    }
-
-    dude.style.cssText = 'left:' + px + 'px;top:' + py + 'px;';
-}
+ function render() {
+     for (var i in bubbles) {
+         bubbles[i].bubble.style.top = bubbles[i].y + 'px'
+     }
+     if (collided) {
+         px = collidedBubble.x + 10;
+         py = collidedBubble.y + 5;
+         scale += 0.001;
+         dude.style.transform = 'scale(' + scale + ')';
+     }
+ 
+     dude.style.left = px + 'px';
+     dude.style.top = py + 'px';
+ }
 
 //Events
 window.onkeydown = keyDown;

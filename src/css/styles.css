@@ -62,7 +62,7 @@ body {
     height: 800px;
     overflow: hidden;
     position: absolute;
-    background: -webkit-linear-gradient(#aee4ff, #3ebbfa);
+    background: -webkit-linear-gradient(#000, #3ebbfa);
 }
 
 .inner {
@@ -104,11 +104,14 @@ body {
     transform: rotateZ(-30deg);
 }
 
+.inner.bubble.animate {
+    -webkit-animation: bubble-anim 4s ease-out infinite;
+    animation: bubble-anim 4s ease-out infinite;
+}
+
 .inner.bubble {
     background: radial-gradient(circle at 50% 55%, rgba(240, 245, 255, 0.6), rgba(240, 245, 255, 0.6) 40%, rgba(225, 238, 255, 0.5) 60%, rgba(43, 130, 255, 0.3));
     position: absolute;
-    /* -webkit-animation: bubble-anim 2s ease-out infinite;
-    animation: bubble-anim 2s ease-out infinite;*/
 }
 
 .inner.bubble:before {
@@ -140,59 +143,26 @@ body {
     font-size: 36px;
 }
 
-/*@-webkit-keyframes bubble-anim {
+@-webkit-keyframes bubble-anim {
     0% {
         -webkit-transform: scale(1);
-        transform: scale(1);
     }
-    20% {
-        -webkit-transform: scaleY(0.95) scaleX(1.05);
-        transform: scaleY(0.95) scaleX(1.05);
+    50% {
+        -webkit-transform: scale(1.5);
     }
-    48% {
-        -webkit-transform: scaleY(1.1) scaleX(0.9);
-        transform: scaleY(1.1) scaleX(0.9);
-    }
-    68% {
-        -webkit-transform: scaleY(0.98) scaleX(1.02);
-        transform: scaleY(0.98) scaleX(1.02);
-    }
-    80% {
-        -webkit-transform: scaleY(1.02) scaleX(0.98);
-        transform: scaleY(1.02) scaleX(0.98);
-    }
-    97%,
     100% {
         -webkit-transform: scale(1);
-        transform: scale(1);
     }
 }
 
 @keyframes bubble-anim {
     0% {
-        -webkit-transform: scale(1);
         transform: scale(1);
     }
-    20% {
-        -webkit-transform: scaleY(0.95) scaleX(1.05);
-        transform: scaleY(0.95) scaleX(1.05);
+    50% {
+        transform: scale(1.5);
     }
-    48% {
-        -webkit-transform: scaleY(1.1) scaleX(0.9);
-        transform: scaleY(1.1) scaleX(0.9);
-    }
-    68% {
-        -webkit-transform: scaleY(0.98) scaleX(1.02);
-        transform: scaleY(0.98) scaleX(1.02);
-    }
-    80% {
-        -webkit-transform: scaleY(1.02) scaleX(0.98);
-        transform: scaleY(1.02) scaleX(0.98);
-    }
-    97%,
     100% {
-        -webkit-transform: scale(1);
         transform: scale(1);
     }
 }
-*/
