@@ -15,7 +15,11 @@ var dude = document.getElementById('jumper'),
     scale = 0.5,
     bubbles = [],
     backgroundBubbles = [],
+    score = 0,
     j = 0;
+
+//load initial score
+updateScore();
 
 //Create the first bubble
 bubbles.push(new Bubble(j, 100, 100, 'collidable', px - 15, py - 75));
@@ -65,7 +69,7 @@ for (var i = 0; i < 40; i++) {
 
 /**
  * jump
- * Sets the y velocity if their is a jump state
+ * Sets the y velocity if there is a jump state
  * @returns 
  */
 function jump() {
@@ -73,6 +77,7 @@ function jump() {
         vy = -16.0;
         canJump = false;
         removeBubble();
+        updateScore(score++);
     }
 }
 
@@ -91,6 +96,7 @@ function checkCollison() {
                 canJump = true;
                 document.getElementById(bubble.id).className='bubble inner animate';
                 collidedBubble = bubbles[i];
+                updateScore(score+=10);
                 return;
             }
         }
@@ -309,6 +315,13 @@ function keyUp(e) {
  
      dude.style.left = px + 'px';
      dude.style.top = py + 'px';
+ }
+
+ /**
+  * Update the score shown 
+  **/
+ function updateScore() {
+    document.getElementById('score').innerText = score;
  }
 
 //Events
