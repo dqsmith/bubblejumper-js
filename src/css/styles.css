@@ -70,13 +70,11 @@ body {
 
 #inner-stage {
     width: 1000px;
-    height: 2000px;
+    height: 4000px;
     position: absolute;
-    top: 1200px;
+    top: 3200px;
     background: -webkit-linear-gradient(#000, #3ebbfa);
     background: linear-gradient(#000, #3ebbfa);    
-    /*background: linear-gradient( to bottom, #00cbfd, #00cbfd 50%, #1db6dc 50%, #1db6dc);*/
-    /*background-size: 100% 100px;*/
 }
 
 #inner-stage.open {
