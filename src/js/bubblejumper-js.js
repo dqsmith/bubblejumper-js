@@ -370,11 +370,11 @@ function keyUp(e) {
         //Remove title messages
         baseStage.removeChild(document.getElementById('title'));
         baseStage.removeChild(document.getElementById('instructions'));
-        
+
         //Clear control classes
         document.getElementById('time-cont').className = '';
         document.getElementById('score-cont').className = '';
-        
+
         //Start drawing
         draw();
 
@@ -401,12 +401,12 @@ function render() {
     for (var i in bubbles) {
         bubbles[i].bubble.style.top = bubbles[i].y + 'px'
     }
-    
+
     //If jumper is in bubble
     if (collided) {
         jumperX = collidedBubble.x + 10;
         jumperY = collidedBubble.y + 1;
-        
+
         //Slowly grow jumper and bubble
         scale += 0.001;
         jumper.style.transform = 'scale(' + scale + ')';
@@ -544,9 +544,16 @@ function gameTimer() {
     timerTimeout = setTimeout(updateTime, 1000);
 }
 
+function placeStage() {
+    baseStage.style.left = (window.innerWidth / 2 - baseStage.clientWidth / 2) + 'px';
+}
+
 //Events
 window.onkeydown = keyDown;
 window.onkeyup = keyUp;
+window.addEventListener('resize', placeStage);
+
+placeStage();
 
 //Kick off first drawing
 draw();
