@@ -10,9 +10,9 @@ var jumper = document.getElementById('jumper'),
     stageHeight = stage.clientHeight,
     stageWidth = stage.clientWidth,
     jumperX = (stageWidth / 2) - 84,
-    stageY = 1200,
+    stageY = 3200,
     stageYOffset = 400,
-    jumperY = 1900,
+    jumperY = 3900,
     vy = 0.0,
     gravity = 0.5,
     canJump = true,
@@ -52,7 +52,7 @@ collidedBubble = bubbles[0];
 collided = true;
 
 //Set the jumper initial position
-jumper.style.cssText = 'left:' + jumperX + 'px;top:' + 1897 + 'px;';
+jumper.style.cssText = 'left:' + jumperX + 'px;top:' + 3897 + 'px;';
 
 //Set the stage initial position
 stage.style.top = 0 + 'px';
@@ -64,7 +64,7 @@ for (var i = 0; i < 40; i++) {
     var spikey = document.createElement('div');
 
     spikey.className = 'spikey';
-    spikey.style.cssText = 'left:' + spikeyLeft + 'px;top:' + 1897 + 'px;';
+    spikey.style.cssText = 'left:' + spikeyLeft + 'px;top:' + 3897 + 'px;';
 
     spikeyLeft += 45;
 
@@ -365,7 +365,6 @@ function keyUp(e) {
     if (!isPlaying && key === 32) {
         isPlaying = true;
         stage.style.top = -stageY + 'px';
-        //stage.style.transform='translateY(' + -stageY + 'px);';
 
         //Remove title messages
         baseStage.removeChild(document.getElementById('title'));
@@ -427,7 +426,7 @@ function render() {
     } else {
 
         //Drop the stage
-        if (stageY < 1190) {
+        if (stageY < 3190) {
             stageY += Math.round(vy);
             stage.style.top = -stageY + 'px';
         }
@@ -544,7 +543,7 @@ function gameTimer() {
     timerTimeout = setTimeout(updateTime, 1000);
 }
 
-function placeStage() {
+function placeStage() { 
     baseStage.style.left = (window.innerWidth / 2 - baseStage.clientWidth / 2) + 'px';
 }
 
