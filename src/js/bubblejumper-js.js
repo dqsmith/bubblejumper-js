@@ -23,7 +23,7 @@ var jumper = document.getElementById('jumper'),
     bubbles = [],
     backgroundBubbles = [],
     timerInterval,
-    direction = 1,
+    direction=1,
     j = 0,
     grounded = 0,
     score = 0,
@@ -500,14 +500,13 @@ function updateTime() {
     document.getElementById('time').textContent = (minutes ? (minutes > 9 ? minutes : '0' + minutes) : '00') + ':' + (seconds > 9 ? seconds : '0' + seconds);
 
     //Reverse the screen after 25 seconds
-    if (seconds % 25 === 0) {
-        direction *= -1;
-        if (!direction) {
-            stage.className = 'reverse';
-        } else {
-            stage.className = 'forward';
-        }
+    if (seconds % 24=== 0) {
+        direction*=-1;
+        baseStage.className = 'reverse';
+    } else if (seconds % 50 === 0) {
+        baseStage.className = 'forward';
     }
+
 
     gameTimer();
 }

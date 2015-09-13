@@ -95,20 +95,20 @@ body {
     height: 800px;
     overflow: hidden;
     position: absolute;
+    -webkit-transition-duration: 1s;
+    transition-duration: 1s;         
 }
 
-#inner-stage.reverse {
-    -webkit-transform: rotateX(180deg);
+#stage.reverse {
+    -webkit-transform: rotateY(180deg);
     transform: rotateY(180deg);
-    -webkit-transition-duration: 400ms;
-    transition-duration: 400ms;
+   
 }
 
-#inner-stage.forward {
-    -webkit-transform: rotateX(0);
+#stage.forward {
+    -webkit-transform: rotateY(0);
     transform: rotateY(0);
-    -webkit-transition-duration: 400ms;
-    transition-duration: 400ms;
+     
 }
 
 
