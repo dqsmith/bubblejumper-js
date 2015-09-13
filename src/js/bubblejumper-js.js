@@ -1,3 +1,4 @@
+
 var jumper = document.getElementById('jumper'),
     height = document.getElementById('stage').clientHeight,
     baseStage = document.getElementById('stage'),
@@ -34,6 +35,7 @@ var jumper = document.getElementById('jumper'),
     timerTimeout,
     messageTimeout,
     playingCounter = 0,
+    bubbleCounter = 1,
     combo = 0,
     comboTicks = 0,
     savior = false,
@@ -42,7 +44,8 @@ var jumper = document.getElementById('jumper'),
         FIRST_BLOOD: 'First blood!',
         SAVIOR: 'Savior!!',
         COMBO: 'Combo!!',
-        SURVIVOR: 'Survivor!!'
+        SURVIVOR: 'Survivor!!',
+        BONUS: 'Bonus, baby!!!'
     };
 
 //Create the first bubble
@@ -101,12 +104,20 @@ function checkCollison() {
     if (!collided) {
         for (var i in bubbles) {
             var bubble = bubbles[i].bubble;
+
             if (hasCollided(jumper, bubble)) {
                 collided = true;
                 canJump = true;
 
                 var occupiedBubble = document.getElementById(bubble.id);
-                occupiedBubble.className = 'bubble inner animate-bubble';
+
+                //check if bonus bubble
+                var bonusClass = '';
+                if(occupiedBubble.className.indexOf('bonus') >= 0) {
+                    bonusClass = 'bonus';
+                }
+
+                occupiedBubble.className = 'bubble inner animate-bubble '+bonusClass;
                 collidedBubble = bubbles[i];
 
                 points.className = 'points';
@@ -129,7 +140,9 @@ function checkCollison() {
 
                     return;
                 }
-
+                if(bonusClass) {
+                    showMessage(messages.BONUS, 20);
+                }
                 if (comboTicks <= 5 && combo === 3) {
                     showMessage(messages.COMBO, 3);
                 } else if (comboTicks > 5) {
@@ -161,7 +174,6 @@ function removeBubbles() {
         if (bubbles[i].y < 30) {
             stage.removeChild(document.getElementById(bubbles[i].id));
             bubbles.splice(i, 1);
-
         }
     }
 }
@@ -224,7 +236,6 @@ function removeBubble() {
     scale = 0.5;
     jumper.style.transform = 'scale(' + scale + ')';
     collidedBubble.y = -collidedBubble.h - 50;
-
 }
 
 /**
@@ -233,6 +244,7 @@ function removeBubble() {
  * @returns 
  */
 function draw() {
+
     if (isPlaying) {
         removeBubbles();
         moveBubbles();
@@ -256,8 +268,10 @@ function draw() {
         //Create new bubble when count is at 50
         if (playingCounter % 50 === 0) {
             if (bubbles.length < 15) {
-                bubbles.push(new Bubble(playingCounter, 100, 100, 'collidable'));
-
+                //create bonus bubble every 10th bubble
+                var bonus = (bubbleCounter % 10 === 0);
+                bubbles.push(new Bubble(playingCounter, 100, 100, 'collidable', null, null, bonus));
+                bubbleCounter++;
             }
         }
 
@@ -302,7 +316,6 @@ function jumping() {
         vy = 0.0;
         canJump = true;
         collided = false;
-
     }
 
 }
@@ -334,8 +347,6 @@ function keyDown(e) {
         break;
 
     }
-
-
 }
 
 /**
@@ -442,19 +453,22 @@ function updateScore(score) {
  * @param {bool} - collidable (is a moving bubble)
  * @param {Number} - x starting left value
  * @param {Number} - y starting top value
+ * @param {bool} - bonus bubble with different color and extra points
  * @returns {object} bubble 
  */
-function Bubble(id, w, h, collidable, x, y) {
+function Bubble(id, w, h, collidable, x, y, bonus) {
     var bubble = document.createElement('div'),
         id = 'bubble_' + id,
         s = Math.round(Math.random() * 1) + 2,
         x = x || Math.round(Math.random() * stageWidth) - w / 2,
-        y = y || Math.round(Math.random() * 100) + (stageHeight);
+        y = y || Math.round(Math.random() * 100) + (stageHeight),
+        bonusClass =  (bonus ? 'bonus' : '');
 
     bubble.setAttribute('id', id);
-    bubble.className = 'bubble inner ' + collidable;
+    bubble.className = 'bubble inner ' + collidable + ' ' + bonusClass;
     bubble.style.cssText = 'left: ' + x + 'px; top: ' + y + 'px; width:' + w + 'px; height:' + h + 'px;';
     stage.appendChild(bubble);
+    console.log(bubble.className + bonus);
 
     return {
         bubble: bubble,

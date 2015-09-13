@@ -63,7 +63,6 @@ body {
     box-shadow: 18px 96px #24ff32, 24px 90px #24ff32, 24px 96px #24ff32, 30px 96px #24ff32, 6px 102px #1ed129, 12px 102px #1ed129, 18px 102px #1ed129, 24px 102px #1ed129, 30px 102px #1ed129, 36px 102px #1ed129, 42px 102px #1ed129, 12px 96px #1ed129, 18px 90px #1ed129, 24px 84px #1ed129, 30px 90px #1ed129, 36px 96px #1ed129, 0px 102px #000000, 6px 96px #000000, 12px 90px #000000, 18px 84px #000000, 24px 78px #000000, 30px 84px #000000, 36px 90px #000000, 42px 96px #000000, 48px 102px #000000;
 }
 
-
 /****************************
     Stage
 ****************************/
@@ -233,6 +232,10 @@ Bubble
     position: absolute;
 }
 
+.inner.bubble.bonus {
+    background: radial-gradient(circle at 50% 55%, rgba(255, 0, 0, 0), rgba(255, 0, 0, 0.1) 40%, rgba(255, 0, 0, 0.3) 60%, rgba(255, 0, 0, 0));
+}
+
 .inner.bubble.background {
     opacity: 0.5;
 }
@@ -352,3 +355,4 @@ Bubble
         transform: scaleX(1);
     }
 }
+
