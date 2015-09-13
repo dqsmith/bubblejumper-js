@@ -1,11 +1,19 @@
-var dude = document.getElementById('jumper'),
-    stage = document.getElementById('stage'),
+
+var jumper = document.getElementById('jumper'),
+    height = document.getElementById('stage').clientHeight,
+    baseStage = document.getElementById('stage'),
+    stage = document.getElementById('inner-stage'),
     spikeyTop = document.getElementById('spikey-top'),
     spikeyBottom = document.getElementById('spikey-bottom'),
-    stageHeight=stage.clientHeight,
-    stageWidth=stage.clientWidth,
-    px = (stageWidth / 2) - 84,
-    py = stageHeight - 50,
+    message = document.getElementById('message'),
+    points = document.createElement('div'),
+    scoreContainer = document.getElementById('score-cont'),
+    stageHeight = stage.clientHeight,
+    stageWidth = stage.clientWidth,
+    jumperX = (stageWidth / 2) - 84,
+    stageY = 3200,
+    stageYOffset = 400,
+    jumperY = 3900,
     vy = 0.0,
     gravity = 0.5,
     canJump = true,
@@ -15,61 +23,67 @@ var dude = document.getElementById('jumper'),
     scale = 0.5,
     bubbles = [],
     backgroundBubbles = [],
+    timerInterval,
+    direction = 1,
+    j = 0,
+    grounded = 0,
     score = 0,
-    j = 0;
-
-//load initial score
-updateScore();
+    isPlaying = false,
+    seconds = 0,
+    minutes = 0,
+    hours = 0,
+    timerTimeout,
+    messageTimeout,
+    playingCounter = 0,
+    bubbleCounter = 1,
+    combo = 0,
+    comboTicks = 0,
+    savior = false,
+    firstBlood = false,
+    messages = {
+        FIRST_BLOOD: 'First blood!',
+        SAVIOR: 'Savior!!',
+        COMBO: 'Combo!!',
+        SURVIVOR: 'Survivor!!',
+        BONUS: 'Bonus, baby!!!'
+    };
 
 //Create the first bubble
-bubbles.push(new Bubble(j, 100, 100, 'collidable', px - 15, py - 75));
+bubbles.push(new Bubble(j, 100, 100, 'collidable', jumperX - 15, jumperY));
 collidedBubble = bubbles[0];
 collided = true;
 
-//Set the jumper
-dude.style.cssText = 'left:' + px + 'px;top:' + py + 'px;';
+//Set the jumper initial position
+jumper.style.cssText = 'left:' + jumperX + 'px;top:' + 3897 + 'px;';
 
-//Release a bubble once a second
-setInterval(function () {
-    bubbles.push(new Bubble(j, 100, 100, 'collidable'));
+//Set the stage initial position
+stage.style.top = 0 + 'px';
 
-    //Release only 15 non-collidable bubbles
-    if (backgroundBubbles.length < 15) {
-        backgroundBubbles.push(new Bubble('', 30, 30, ''));
-    }
-    j++;
-}, 1000);
-
-//Add top spikey
+//Build the bottom spikies
 var spikeyLeft = -18;
+for (var i = 0; i < 40; i++) {
 
-for (var i = 0; i < 60; i++) {
     var spikey = document.createElement('div');
 
     spikey.className = 'spikey';
-    spikey.style.left = spikeyLeft + 'px';
+    spikey.style.cssText = 'left:' + spikeyLeft + 'px;top:' + 3897 + 'px;';
+
     spikeyLeft += 45;
 
-    document.getElementById('spikey-top').appendChild(spikey);
+    spikeyBottom.appendChild(spikey);
 }
 
-//Add bottom spikey
-spikeyLeft = -18;
-
+//Create random background bubbles
 for (var i = 0; i < 40; i++) {
-    var spikey = document.createElement('div');
+    var x = Math.round(Math.random() * stage.clientWidth);
+    var y = Math.round(Math.random() * stage.clientHeight);
 
-    spikey.className = 'spikey bottom';
-    spikey.style.left = spikeyLeft + 'px';
-    spikeyLeft += 45;
-
-    document.getElementById('spikey-bottom').appendChild(spikey);
+    backgroundBubbles.push(new Bubble('', 30, 30, 'background', x, y));
 }
-
 
 /**
  * jump
- * Sets the y velocity if there is a jump state
+ * Sets the y velocity if their is a jump state
  * @returns 
  */
 function jump() {
@@ -77,7 +91,6 @@ function jump() {
         vy = -16.0;
         canJump = false;
         removeBubble();
-        updateScore(score++);
     }
 }
 
@@ -91,21 +104,64 @@ function checkCollison() {
     if (!collided) {
         for (var i in bubbles) {
             var bubble = bubbles[i].bubble;
-            if (hasCollided(dude, bubble)) {
+
+            if (hasCollided(jumper, bubble)) {
                 collided = true;
                 canJump = true;
-                document.getElementById(bubble.id).className='bubble inner animate';
+
+                var occupiedBubble = document.getElementById(bubble.id);
+
+                //check if bonus bubble
+                var bonusClass = '';
+                if(occupiedBubble.className.indexOf('bonus') >= 0) {
+                    bonusClass = 'bonus';
+                }
+
+                occupiedBubble.className = 'bubble inner animate-bubble '+bonusClass;
                 collidedBubble = bubbles[i];
-                updateScore(score+=10);
-                return;
+
+                points.className = 'points';
+                points.textContent = '+1';
+
+                occupiedBubble.appendChild(points);
+
+                updateScore(score++);
+
+                combo++;
+
+                if (!firstBlood) {
+                    firstBlood = true;
+                    showMessage(messages.FIRST_BLOOD, 2);
+                    return;
+                }
+                if (grounded === 1 && !savior) {
+                    savior = true;
+                    showMessage(messages.SAVIOR, 10);
+
+                    return;
+                }
+                if(bonusClass) {
+                    showMessage(messages.BONUS, 20);
+                }
+                if (comboTicks <= 5 && combo === 3) {
+                    showMessage(messages.COMBO, 3);
+                } else if (comboTicks > 5) {
+                    comboTicks = 0;
+                    combo = 0;
+                }
+
             }
         }
-        
-        if(py == stageHeight - 75){
+
+        if (jumperY == stageHeight - 75) {
             //Jumper has crashed on spikey
-        }        
+            canJump = true;
+            jump();
+            grounded++;
+        }
     }
 }
+
 /**
  * removeBubbles
  * removes collidable bubbles and resets non-collidable bubbles
@@ -118,15 +174,6 @@ function removeBubbles() {
         if (bubbles[i].y < 30) {
             stage.removeChild(document.getElementById(bubbles[i].id));
             bubbles.splice(i, 1);
-            
-        }
-    }
-
-    var k = backgroundBubbles.length;
-    while (k--) {
-        if (backgroundBubbles[k].y < -backgroundBubbles[k].h - 50) {
-            backgroundBubbles[k].y = Math.round(Math.random() * stageHeight / 2) + (stageHeight);
-            backgroundBubbles[k].x = Math.round(Math.random() * stageWidth);
         }
     }
 }
@@ -139,16 +186,13 @@ function removeBubbles() {
 function moveBubbles() {
     var i = bubbles.length;
     while (i--) {
+        var placement = bubbles[i].bubble.parentElement.offsetTop + bubbles[i].offsetTop;
         bubbles[i].y -= bubbles[i].s;
-        bubbles[i].bubble.style.left = bubbles[i].x + 'px';
-        bubbles[i].bubble.style.top = bubbles[i].y + 'px';
-    }
 
-    var k = backgroundBubbles.length;
-    while (k--) {
-        backgroundBubbles[k].y -= backgroundBubbles[k].s;
-        backgroundBubbles[k].bubble.style.left = backgroundBubbles[k].x + 'px';
-        backgroundBubbles[k].bubble.style.top = backgroundBubbles[k].y + 'px';
+        if (placement > 1000 && placement < 0) {
+            bubbles[i].bubble.style.left = bubbles[i].x + 'px';
+            bubbles[i].bubble.style.top = bubbles[i].y + 'px';
+        }
     }
 }
 
@@ -177,15 +221,20 @@ function hasCollided(el1, el2) {
  * @returns 
  */
 function checkRemoveBubble() {
-    if (scale > 0.75 || collidedBubble.y<30) {
+    if (scale > 0.75) {
         removeBubble();
     }
 }
 
+/**
+ * removeBubble
+ * Remove the bubble
+ * @returns 
+ */
 function removeBubble() {
     collided = false;
     scale = 0.5;
-    dude.style.transform = 'scale(' + scale + ')';
+    jumper.style.transform = 'scale(' + scale + ')';
     collidedBubble.y = -collidedBubble.h - 50;
 }
 
@@ -195,24 +244,44 @@ function removeBubble() {
  * @returns 
  */
 function draw() {
-    removeBubbles();
-    moveBubbles();
 
-    if (!collided) {
-        jumping();
-        checkCollison();
+    if (isPlaying) {
+        removeBubbles();
+        moveBubbles();
+
+        if (!collided) {
+            jumping();
+            checkCollison();
+        }
+
+        render();
+
+        checkRemoveBubble();
+
+        if (grounded < 2) {
+            requestAnimationFrame(draw);
+        } else {
+            clearTimeout(timerTimeout);
+            document.getElementById('game-over').className = ''
+        }
+
+        //Create new bubble when count is at 50
+        if (playingCounter % 50 === 0) {
+            if (bubbles.length < 15) {
+                //create bonus bubble every 10th bubble
+                var bonus = (bubbleCounter % 10 === 0);
+                bubbles.push(new Bubble(playingCounter, 100, 100, 'collidable', null, null, bonus));
+                bubbleCounter++;
+            }
+        }
+
+        playingCounter++;
     }
-
-    render();
-    checkRemoveBubble();
-
-    requestAnimationFrame(draw);
 }
-
 
 /**
  * move
- * Move the dude every 0.0033 seconds; if the dude is already moving return
+ * Move the jumper every 0.0033 seconds; if the jumper is already moving return
  * @param {number} dir - 0=left, 1=right
  * @returns 
  */
@@ -223,27 +292,27 @@ function move(dir) {
     }
 
     keyTimer = setInterval(function () {
-        if (dir === 0) {
-            px -= 5;
+        if (dir === 1) {
+            jumperX -= 5;
         } else {
-            px += 5;
+            jumperX += 5;
         }
     }, 33);
 }
 
 /**
  * jumping
- * The dude is jumping, increase/decrease the y point. If the dude is near the bottom, reset velocity, canJump, and collided state
+ * The jumper is jumping, increase/decrease the y point. If the jumper is near the bottom, reset velocity, canJump, and collided state
  * @returns 
  */
 
 function jumping() {
     vy += gravity;
-    py += vy;
+    jumperY += vy;
 
 
-    if (py > stageHeight - 75) {
-        py = stageHeight - 75;
+    if (jumperY > stageHeight - 75) {
+        jumperY = stageHeight - 75;
         vy = 0.0;
         canJump = true;
         collided = false;
@@ -270,15 +339,14 @@ function keyDown(e) {
         break;
     case 37:
         //left
-        move(0);
+        move(1);
         break;
     case 39:
         //right
-        move(1);
+        move(-1);
         break;
 
     }
-
 }
 
 /**
@@ -289,6 +357,27 @@ function keyDown(e) {
 
 function keyUp(e) {
     var key = e.keyCode ? e.keyCode : e.which;
+
+    //Start playing if not already playing and user pressed space key
+    if (!isPlaying && key === 32) {
+        isPlaying = true;
+        stage.style.top = -stageY + 'px';
+
+        //Remove title messages
+        baseStage.removeChild(document.getElementById('title'));
+        baseStage.removeChild(document.getElementById('instructions'));
+
+        //Clear control classes
+        document.getElementById('time-cont').className = '';
+        document.getElementById('score-cont').className = '';
+
+        //Start drawing
+        draw();
+
+        //Start game timer
+        gameTimer();
+    }
+
     //left or right
     if (key === 37 || key === 39) {
 
@@ -299,51 +388,87 @@ function keyUp(e) {
 
 /**
  * render
- * Render all screen assets; move dude and collidable bubles
+ * Render all screen assets; move jumper and collidable bubles
  * @returns 
  */
- function render() {
-     for (var i in bubbles) {
-         bubbles[i].bubble.style.top = bubbles[i].y + 'px'
-     }
-     if (collided) {
-         px = collidedBubble.x + 10;
-         py = collidedBubble.y + 5;
-         scale += 0.001;
-         dude.style.transform = 'scale(' + scale + ')';
-     }
- 
-     dude.style.left = px + 'px';
-     dude.style.top = py + 'px';
- }
+function render() {
 
- /**
-  * Update the score shown 
-  **/
- function updateScore() {
-    document.getElementById('score').innerText = score;
- }
+    //Move bubbles
+    for (var i in bubbles) {
+        bubbles[i].bubble.style.top = bubbles[i].y + 'px'
+    }
 
-//Events
-window.onkeydown = keyDown;
-window.onkeyup = keyUp;
+    //If jumper is in bubble
+    if (collided) {
+        jumperX = collidedBubble.x + 10;
+        jumperY = collidedBubble.y + 1;
+
+        //Slowly grow jumper and bubble
+        scale += 0.001;
+        jumper.style.transform = 'scale(' + scale + ')';
+        collidedBubble.bubble.transform = 'scale(' + scale + ')';
+
+        //Set the starting placement
+        if (jumperY < stageY + stageYOffset) {
+            stageY -= 1;
+            stage.style.top = -stageY + 'px';
+            stage.className = 'start-playing';
+        }
+
+        if (jumper.parentElement.offsetTop + jumper.offsetTop < 200) {
+            collidedBubble.y = collidedBubble.y + 1;
+        }
+
+
+    } else {
+
+        //Drop the stage
+        if (stageY < 3190) {
+            stageY += Math.round(vy);
+            stage.style.top = -stageY + 'px';
+        }
+
+    }
+
+    //Update jumper position
+    jumper.style.left = jumperX + 'px';
+    jumper.style.top = jumperY + 'px';
+}
+
+/**
+ * Update the score shown 
+ **/
+function updateScore(score) {
+    document.getElementById('score').textContent = score;
+}
+
+
 
 /**
  * Bubble
- * Bubble class for creation
- * @returns 
+ * Creates collidable and non-collidable bubbles
+ * @param {Number} - id
+ * @param {Number} - width
+ * @param {Number} - height
+ * @param {bool} - collidable (is a moving bubble)
+ * @param {Number} - x starting left value
+ * @param {Number} - y starting top value
+ * @param {bool} - bonus bubble with different color and extra points
+ * @returns {object} bubble 
  */
-function Bubble(id, w, h, collidable, x, y) {
+function Bubble(id, w, h, collidable, x, y, bonus) {
     var bubble = document.createElement('div'),
         id = 'bubble_' + id,
         s = Math.round(Math.random() * 1) + 2,
         x = x || Math.round(Math.random() * stageWidth) - w / 2,
-        y = y || Math.round(Math.random() * 100) + (stageHeight);
+        y = y || Math.round(Math.random() * 100) + (stageHeight),
+        bonusClass =  (bonus ? 'bonus' : '');
 
     bubble.setAttribute('id', id);
-    bubble.className = 'bubble inner ' + collidable;
+    bubble.className = 'bubble inner ' + collidable + ' ' + bonusClass;
     bubble.style.cssText = 'left: ' + x + 'px; top: ' + y + 'px; width:' + w + 'px; height:' + h + 'px;';
     stage.appendChild(bubble);
+    console.log(bubble.className + bonus);
 
     return {
         bubble: bubble,
@@ -355,4 +480,89 @@ function Bubble(id, w, h, collidable, x, y) {
         h: h
     }
 }
+
+/**
+ * updateTime
+ * Updates the time control, updates combo ticks, and sets message and points for suriving every 30 seconds
+ * @returns 
+ */
+function updateTime() {
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+    }
+
+    if (seconds % 30 === 0) {
+        showMessage(messages.SURVIVOR, 5);
+    }
+
+    comboTicks++;
+
+    document.getElementById('time').textContent = (minutes ? (minutes > 9 ? minutes : '0' + minutes) : '00') + ':' + (seconds > 9 ? seconds : '0'+ seconds);
+    
+    //Reverse the screen after 25 seconds
+    if (seconds % 25 === 0) {
+        direction *= -1;
+        if (!direction) {
+            stage.className = 'reverse';
+        } else {
+            stage.className = 'forward';
+        }
+    }
+
+    gameTimer();
+}
+
+/**
+ * showMessage
+ * Creates points message, updates score, and manages message animation
+ * @param {string} - msg
+ * @param {Number} - points
+ * @param {Number} - height
+ * @returns 
+ */
+function showMessage(msg, points) {
+    message.textContent = '';
+    message.className = '';
+    scoreContainer.className = '';
+
+    clearTimeout(messageTimeout);
+
+    message.textContent = msg;
+    message.className = 'show';
+
+    messageTimeout = setTimeout(function () {
+        message.textContent = '';
+        message.className = '';
+        scoreContainer.className = '';
+    }, 750);
+
+    points.textContent = '+' + points;
+    updateScore(score += points);
+
+    scoreContainer.className = 'score-animate';
+}
+
+/**
+ * gameTimer
+ * Starts a game timer timeout
+ * @returns 
+ */
+function gameTimer() {
+    timerTimeout = setTimeout(updateTime, 1000);
+}
+
+function placeStage() { 
+    baseStage.style.left = (window.innerWidth / 2 - baseStage.clientWidth / 2) + 'px';
+}
+
+//Events
+window.onkeydown = keyDown;
+window.onkeyup = keyUp;
+window.addEventListener('resize', placeStage);
+
+placeStage();
+
+//Kick off first drawing
 draw();

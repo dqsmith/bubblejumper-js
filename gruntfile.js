@@ -5,11 +5,11 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
             options: {
-                banner: '/*! <%= pkg.name %>-<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> https://github.com/dqsmith/fishy13k*/\n'
+                banner: '/*! <%= pkg.name %>-<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> https://github.com/dqsmith/bubblejumper-js*/\n'
             },
             build: {
                 src: 'src/js/*.js',
-                dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js'
+                dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.min.js'
             }
         },
         watch: {
@@ -33,7 +33,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'src/css',
                     src: ['**/*.css', '**/!*.min.css'],
-                    dest: 'dist/css',
+                    dest: 'dist/',
                     ext: '.min.css'
                 }]
             }
