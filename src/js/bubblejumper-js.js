@@ -1,4 +1,3 @@
-
 var jumper = document.getElementById('jumper'),
     height = document.getElementById('stage').clientHeight,
     baseStage = document.getElementById('stage'),
@@ -11,7 +10,7 @@ var jumper = document.getElementById('jumper'),
     stageHeight = stage.clientHeight,
     stageWidth = stage.clientWidth,
     jumperX = (stageWidth / 2) - 84,
-    stageY = 3200,
+    stageY = 3200 - window.innerHeight + 800,
     stageYOffset = 400,
     jumperY = 3900,
     vy = 0.0,
@@ -113,11 +112,11 @@ function checkCollison() {
 
                 //check if bonus bubble
                 var bonusClass = '';
-                if(occupiedBubble.className.indexOf('bonus') >= 0) {
+                if (occupiedBubble.className.indexOf('bonus') >= 0) {
                     bonusClass = 'bonus';
                 }
 
-                occupiedBubble.className = 'bubble inner animate-bubble '+bonusClass;
+                occupiedBubble.className = 'bubble inner animate-bubble ' + bonusClass;
                 collidedBubble = bubbles[i];
 
                 points.className = 'points';
@@ -140,7 +139,7 @@ function checkCollison() {
 
                     return;
                 }
-                if(bonusClass) {
+                if (bonusClass) {
                     showMessage(messages.BONUS, 20);
                 }
                 if (comboTicks <= 5 && combo === 3) {
@@ -343,7 +342,7 @@ function keyDown(e) {
         break;
     case 39:
         //right
-        move(-1);
+        move(0);
         break;
 
     }
@@ -409,9 +408,9 @@ function render() {
         collidedBubble.bubble.transform = 'scale(' + scale + ')';
 
         //Set the starting placement
-        if (jumperY < stageY + stageYOffset) {
+        if (jumperY < stageY + stageYOffset + -window.innerHeight + 800) {
             stageY -= 1;
-            stage.style.top = -stageY + 'px';
+            stage.style.top = -stageY + window.innerHeight - 800 + 'px';
             stage.className = 'start-playing';
         }
 
@@ -425,7 +424,7 @@ function render() {
         //Drop the stage
         if (stageY < 3190) {
             stageY += Math.round(vy);
-            stage.style.top = -stageY + 'px';
+            stage.style.top = -stageY + window.innerHeight - 800 + 'px';
         }
 
     }
@@ -462,13 +461,12 @@ function Bubble(id, w, h, collidable, x, y, bonus) {
         s = Math.round(Math.random() * 1) + 2,
         x = x || Math.round(Math.random() * stageWidth) - w / 2,
         y = y || Math.round(Math.random() * 100) + (stageHeight),
-        bonusClass =  (bonus ? 'bonus' : '');
+        bonusClass = (bonus ? 'bonus' : '');
 
     bubble.setAttribute('id', id);
     bubble.className = 'bubble inner ' + collidable + ' ' + bonusClass;
     bubble.style.cssText = 'left: ' + x + 'px; top: ' + y + 'px; width:' + w + 'px; height:' + h + 'px;';
     stage.appendChild(bubble);
-    console.log(bubble.className + bonus);
 
     return {
         bubble: bubble,
@@ -499,8 +497,8 @@ function updateTime() {
 
     comboTicks++;
 
-    document.getElementById('time').textContent = (minutes ? (minutes > 9 ? minutes : '0' + minutes) : '00') + ':' + (seconds > 9 ? seconds : '0'+ seconds);
-    
+    document.getElementById('time').textContent = (minutes ? (minutes > 9 ? minutes : '0' + minutes) : '00') + ':' + (seconds > 9 ? seconds : '0' + seconds);
+
     //Reverse the screen after 25 seconds
     if (seconds % 25 === 0) {
         direction *= -1;
@@ -553,8 +551,15 @@ function gameTimer() {
     timerTimeout = setTimeout(updateTime, 1000);
 }
 
-function placeStage() { 
+/**
+ * placeStage
+ * Centers the stage on the page
+ * @returns 
+ */
+function placeStage() {
     baseStage.style.left = (window.innerWidth / 2 - baseStage.clientWidth / 2) + 'px';
+    baseStage.style.height = window.innerHeight + 'px';
+    stage.style.top = -stageY + window.innerHeight - 790 + 'px';
 }
 
 //Events

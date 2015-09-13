@@ -1,8 +1,11 @@
+html,
 body {
     background: #000;
     overflow: hidden;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
     color: #fff;
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -63,6 +66,7 @@ body {
     box-shadow: 18px 96px #24ff32, 24px 90px #24ff32, 24px 96px #24ff32, 30px 96px #24ff32, 6px 102px #1ed129, 12px 102px #1ed129, 18px 102px #1ed129, 24px 102px #1ed129, 30px 102px #1ed129, 36px 102px #1ed129, 42px 102px #1ed129, 12px 96px #1ed129, 18px 90px #1ed129, 24px 84px #1ed129, 30px 90px #1ed129, 36px 96px #1ed129, 0px 102px #000000, 6px 96px #000000, 12px 90px #000000, 18px 84px #000000, 24px 78px #000000, 30px 84px #000000, 36px 90px #000000, 42px 96px #000000, 48px 102px #000000;
 }
 
+
 /****************************
     Stage
 ****************************/
@@ -73,7 +77,7 @@ body {
     position: absolute;
     top: 3200px;
     background: -webkit-linear-gradient(#000, #3ebbfa);
-    background: linear-gradient(#000, #3ebbfa);    
+    background: linear-gradient(#000, #3ebbfa);
 }
 
 #inner-stage.open {
@@ -83,7 +87,7 @@ body {
 
 #inner-stage.playing {
     -webkit-transition-duration: 400ms;
-    transition-duration: 400ms;    
+    transition-duration: 400ms;
 }
 
 #stage {
@@ -97,14 +101,14 @@ body {
     -webkit-transform: rotateX(180deg);
     transform: rotateY(180deg);
     -webkit-transition-duration: 400ms;
-    transition-duration: 400ms;      
+    transition-duration: 400ms;
 }
 
 #inner-stage.forward {
     -webkit-transform: rotateX(0);
     transform: rotateY(0);
     -webkit-transition-duration: 400ms;
-    transition-duration: 400ms;      
+    transition-duration: 400ms;
 }
 
 
@@ -144,7 +148,7 @@ Text Containers
 
 #score-cont {
     top: 50px;
-    right: 150px;
+    right: 60px;
 }
 
 .score-animate {
@@ -179,6 +183,8 @@ Text Containers
     -webkit-animation: messsage-anim 1s;
     animation: messsage-anim 1s;
 }
+
+
 /****************************
 Bubble
 ****************************/
@@ -355,4 +361,3 @@ Bubble
         transform: scaleX(1);
     }
 }
-
