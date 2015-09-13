@@ -79,10 +79,12 @@ body {
 
 #inner-stage.open {
     -webkit-transition-duration: 1s;
+    transition-duration: 1s;
 }
 
 #inner-stage.playing {
     -webkit-transition-duration: 400ms;
+    transition-duration: 400ms;    
 }
 
 #stage {
@@ -93,11 +95,17 @@ body {
 }
 
 #inner-stage.reverse {
-    /*-webkit-transform: rotateY(180deg);*/
+    -webkit-transform: rotateX(180deg);
+    transform: rotateY(180deg);
+    -webkit-transition-duration: 400ms;
+    transition-duration: 400ms;      
 }
 
 #inner-stage.forward {
-    /*-webkit-transform: rotateY(0);*/
+    -webkit-transform: rotateX(0);
+    transform: rotateY(0);
+    -webkit-transition-duration: 400ms;
+    transition-duration: 400ms;      
 }
 
 
