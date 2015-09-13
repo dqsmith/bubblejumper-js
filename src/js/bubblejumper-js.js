@@ -539,6 +539,11 @@ function gameTimer() {
     timerTimeout = setTimeout(updateTime, 1000);
 }
 
+/**
+ * placeStage
+ * Centers the stage on the page
+ * @returns 
+ */
 function placeStage() { 
     baseStage.style.left = (window.innerWidth / 2 - baseStage.clientWidth / 2) + 'px';
 }
