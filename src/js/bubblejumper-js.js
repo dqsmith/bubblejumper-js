@@ -23,7 +23,6 @@ var jumper = document.getElementById('jumper'),
     bubbles = [],
     backgroundBubbles = [],
     timerInterval,
-    time = 1,
     direction = 1,
     j = 0,
     grounded = 0,
@@ -71,19 +70,6 @@ for (var i = 0; i < 40; i++) {
     spikeyBottom.appendChild(spikey);
 }
 
-/*timerInterval = setInterval(function () {
-
-    if (time % 10 === 0) {
-        //direction *= -1;
-        if (direction === -1) {
-            stage.className = 'reverse';
-        } else {
-            stage.className = 'forward';
-        }
-    }
-    time += 1;
-}, 1000);*/
-
 //Create random background bubbles
 for (var i = 0; i < 40; i++) {
     var x = Math.round(Math.random() * stage.clientWidth);
@@ -124,7 +110,7 @@ function checkCollison() {
                 collidedBubble = bubbles[i];
 
                 points.className = 'points';
-                points.innerText = '+1';
+                points.textContent = '+1';
 
                 occupiedBubble.appendChild(points);
 
@@ -340,11 +326,11 @@ function keyDown(e) {
         break;
     case 37:
         //left
-        move(direction);
+        move(1);
         break;
     case 39:
         //right
-        move(direction * -1);
+        move(-1);
         break;
 
     }
@@ -442,7 +428,7 @@ function render() {
  * Update the score shown 
  **/
 function updateScore(score) {
-    document.getElementById('score').innerText = score;
+    document.getElementById('score').textContent = score;
 }
 
 
@@ -499,7 +485,17 @@ function updateTime() {
 
     comboTicks++;
 
-    document.getElementById('time').innerText = (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+    document.getElementById('time').textContent = (minutes ? (minutes > 9 ? minutes : '0' + minutes) : '00') + ':' + (seconds > 9 ? seconds : '0'+ seconds);
+    
+    //Reverse the screen after 25 seconds
+    if (seconds % 25 === 0) {
+        direction *= -1;
+        if (!direction) {
+            stage.className = 'reverse';
+        } else {
+            stage.className = 'forward';
+        }
+    }
 
     gameTimer();
 }
@@ -513,22 +509,22 @@ function updateTime() {
  * @returns 
  */
 function showMessage(msg, points) {
-    message.innerText = '';
+    message.textContent = '';
     message.className = '';
     scoreContainer.className = '';
 
     clearTimeout(messageTimeout);
 
-    message.innerText = msg;
+    message.textContent = msg;
     message.className = 'show';
 
     messageTimeout = setTimeout(function () {
-        message.innerText = '';
+        message.textContent = '';
         message.className = '';
         scoreContainer.className = '';
     }, 750);
 
-    points.innerText = '+' + points;
+    points.textContent = '+' + points;
     updateScore(score += points);
 
     scoreContainer.className = 'score-animate';
