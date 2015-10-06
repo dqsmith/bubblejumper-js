@@ -4,6 +4,7 @@ A [JS13kGames](http://js13kgames.com/) entry, and a simple game for simple peopl
 
 You can view the [demo here](http://js13kgames.com/entries/bubble-jumper).
 
+![Image of Bubblejumper](https://cloud.githubusercontent.com/assets/8572082/10313835/7d255310-6c06-11e5-8e70-5446d78b24cf.png)
 
 ##Install
 1. Download or clone repo.
